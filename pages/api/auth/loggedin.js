@@ -13,14 +13,14 @@ export default async function handler(req, res) {
 		try {
 			const token = getCookie('token', {req, res})
 
-			if (!token) return res.json(false)
+			if (!token) return res.json({ loggedIn: false })
 
 			jwt.verify(token, process.env.JWT_SECRET)
 
-			return res.send(true)
+			return res.send({ loggedIn: true })
 		} catch (error) {
 			console.error(error)
-			return res.send(false)
+			return res.send({ loggedIn: false })
 		}
 	} else {
 		return res.status(400).json({ message: 'Bad request.' })
