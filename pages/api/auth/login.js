@@ -18,17 +18,17 @@ export default async function handler(req, res) {
 
 			// Validate inputs.
 			if (!email || !password) {
-				return res.status(400).json({ message: 'Missing required fields.' })
+				return res.status(400).json({ success: false, message: 'Missing required fields.' })
 			}
 
 			const user = await User.findOne({ email })
 			if (!user) {
-				return res.status(401).json({ message: 'Incorrect email or password.' })
+				return res.status(401).json({ success: false, message: 'Incorrect email or password.' })
 			}
 
 			const correctPassword = await bcrypt.compare(password, user.hashedPassword)
 			if (!correctPassword) {
-				return res.status(401).json({ message: 'Incorrect email or password.' })
+				return res.status(401).json({ success: false, message: 'Incorrect email or password.' })
 			}
 
 			// Sign token.
@@ -36,13 +36,13 @@ export default async function handler(req, res) {
 
 			setCookies('token', token, {req, res})
 
-			return res.status(200).json({ message: "Logged in successfully." })
+			return res.status(200).json({ success: true, message: "Logged in successfully." })
 
 		} catch (error) {
 			console.log(error)
 			return res.status(500)
 		}
 	} else {
-		return res.status(400).json({ message: 'Bad request.' })
+		return res.status(400).json({ success: false, message: 'Bad request.' })
 	}
 }

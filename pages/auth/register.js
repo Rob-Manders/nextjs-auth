@@ -1,25 +1,18 @@
 
-import { useState, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import { useRouter } from 'next/router'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function Register() {
 	const router = useRouter()
-	const [ loggedIn, setLoggedIn ] = useState(false)
+	const { loggedIn, authCheck } = useContext(AuthContext)
 	const [ email, setEmail ] = useState('')
 	const [ password, setPassword ] = useState('')
 	const [ passwordVerify, setPasswordVerify ] = useState('')
 	const [ message, setMessage ] = useState('')
+	const [ pageLoaded, setPageLoaded ] = useState(false)
 	
-	async function loginCheck() {
-		const response = await fetch(`http://localhost:3000/api/auth/loggedin`, { method: 'GET' })
-		const data = await response.json()
-		setLoggedIn(data.loggedIn)
-	}
-
-	useEffect(() => {
-		loginCheck()
-		if (loggedIn === true) router.push('/')
-	}, [])
+	if (loggedIn) router.push('/')
 
 	async function register(event) {
 		event.preventDefault()
@@ -36,12 +29,13 @@ export default function Register() {
 					passwordVerify
 				})
 			})
-			const data = await response.json()
+			const { success, message } = await response.json()
 
-			if (data.success === true) {
+			if (success === true) {
+				authCheck()
 				router.push('/')
 			} else {
-				setMessage(data.message)
+				setMessage(message)
 			}
 		} catch (error) {
 			setMessage('Unable to fetch response from server.')
