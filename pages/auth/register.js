@@ -56,6 +56,7 @@ export default function Register() {
 						value={email}
 					/>
 				</label>
+				<br />
 				<label>
 					Password:
 					<input
@@ -64,6 +65,7 @@ export default function Register() {
 						value={password}
 					/>
 				</label>
+				<br />
 				<label>
 					Confirm Password:
 					<input
@@ -72,7 +74,7 @@ export default function Register() {
 						value={passwordVerify}
 					/>
 				</label>
-
+				<br />
 				<button type="submit">Register</button>
 			</form>
 		</>

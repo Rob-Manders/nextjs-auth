@@ -2,6 +2,7 @@
 import { useState, useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 export default function Login() {
 	const router = useRouter()
@@ -35,7 +36,7 @@ export default function Login() {
 				setMessage(message)
 			}
 		} catch (error) {
-			setMessage('UNable to fetch response from server.')
+			setMessage('Unable to fetch response from server.')
 		}
 	}
 
@@ -53,6 +54,7 @@ export default function Login() {
 						value={email}
 					/>
 				</label>
+				<br />
 				<label>
 					Password:
 					<input
@@ -61,9 +63,11 @@ export default function Login() {
 						value={password}
 					/>
 				</label>
-
+				<br />
 				<button type="submit">Login</button>
 			</form>
+
+			<Link href="/auth/request-reset">Forgot Password</Link>
 		</>
 	)
 }

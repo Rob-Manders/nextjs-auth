@@ -18,12 +18,12 @@ export default async function handler(req, res) {
 			const { userId } = req.body
 
 			if ( !userId ) {
-				return res.status(400).json({ message: 'Missing required fields.' })
+				return res.status(400).json({ success: false, message: 'Missing required fields.' })
 			}
 
 			const existingUser = await User.findById(userId)
 			if (!existingUser) {
-				return res.status(400).json({ message: 'Invalid user ID.' })
+				return res.status(400).json({ success: false, message: 'Invalid user ID.' })
 			}
 
 			const existingToken = await ResetToken.findOne({ userId })
@@ -45,14 +45,17 @@ export default async function handler(req, res) {
 			// TODO: Put token in an email and remove from HTTP response.
 
 			return res.status(200).json({ 
+				success: true, 
 				message: 'Requested password reset.',
 				encodedToken
 			})
 
 		} catch (error) {
-			return res.status(500)
+			return res.status(500).json({
+				success: false
+			})
 		}
 	} else {
-		return res.status(400)
+		return res.status(400).json({ success: false })
 	}
 }
